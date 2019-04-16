@@ -1,0 +1,78 @@
+
+
+c. What you have done in this assignement.
+	
+According the duide, I have written 6 .c files to meet all the requirement in socket_programming_project. 
+
+First of all, four servers A, B, C and D(AWS) boot up and run. server A, B and C are using UDP to connect with server D(AWS). The client and monitor are using TCP connection wiht AWS. 
+Secondly, search the data savedin server A(database_a.cvs) and B(database_b.cvs). After searching, if data exists, server A and B will send the data to AWS. If not, server A and B will tell AWS the data is not found. 
+Thirdly, after AWS get the required data from server A and B, it will send the data to server C for computation. If not, AWS will send 'not found' message to the client and monitor. Otherwise, server C will send transmission delay, propgation delay and end-to-end delay to AWS.
+Then, after receiving data from server C, AWS will send end-to-end delay to the client and all three results to the monitor by TCP.
+
+d. What your code files are what each one of them does.
+	
+serverA.c: After receiving information from AWS, it can serach the database_a.cvs to find needed data. If the data exists, server A can send them back to AWS. If not, server A can tell AWS the data is not found.
+	
+serverB.c: After receiving information from AWS, it can serach the database_b.cvs to find needed data. If the data exists, server A can send them back to AWS. If not, server A can tell AWS the data is not found.
+	
+serverC.c: After receiving information from AWS, it can compute the propagation delay, transmission delay and end-to-end delay and send them back to AWS by UDP.
+
+client.c: It can receive input data and set up TCP connection with AWS. It can send the data to AWS and receive end-to-end delay.
+	
+monitor.c: It can set up TCP connection with AWS, receive the input data and all three results from AWS.
+	
+aws.c: It connects with client and monitor by TCP, sends and receives data with server A, B and C by UDP. It recvives input from client, send it to monitor by TCP and to server A and B by UDP. After searching, it receive data from server A and B, then send it to server C for computation. After receiving the computated results from server C, it can send end-to-end delay to the client and all three results to the monitor by TCP.
+
+e. The format of all messages exchanged.
+  
+   serverA:
+  char *link_id
+ 
+   serverB:
+  char *link_id
+
+   serverC:
+  char-->double link_id[10];
+  char-->double size[10];
+  char-->double length[10];
+  char-->double power[10];
+  char-->double bandwidth[10];
+  char-->double velocity[10];
+  char-->double noise_power[10];
+  double T_trans;
+  double T_prop;
+  double endtoend_delay; 
+
+   client:
+  char link_id[10];
+  char size[10];
+  char power[10];
+  double T_trans;
+  double T_prop;
+  double endtoend_delay;
+
+   monitor:
+  char link_id[10];
+  char size[10];
+  char power[10];
+  double T_trans;
+  double T_prop;
+  double endtoend_delay;
+
+   aws:
+  char link_id[10]; 
+  char size[10];
+  char power[10];
+  char bandwidth[10];
+  char length[10]; 
+  char velocity[10];
+  char noise[10];
+  double T_prop;
+  double T_trans;
+  double endtoend_delay;
+
+f. Any idiosyncrasy of your project.
+   the result(T_trans,T_prop,endtoend_delay) of computation by serverC has problem.
+
+g. Reused code:
+   The code for setting up TCP and UDP are origined from "Beej's Guide to C Programming and Network Programming". They are used several times in this project.
